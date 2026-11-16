@@ -1,0 +1,478 @@
+Let's prepare your **3rd Blockchain practical** in an easy way. This practical is very important because you may be asked to write the Solidity smart contract, deploy it, perform transactions and explain the code in your viva.
+
+# **Practical 3: Smart Contract for Bank Account**
+
+## **1. Aim**
+
+To write and deploy a smart contract on an Ethereum test network for a customer's bank account to perform the following operations:
+
+1. Deposit money.
+2. Withdraw money.
+3. Show account balance.
+
+## **2. Software Requirements**
+
+- Remix IDE
+- MetaMask wallet
+- Sepolia Test Network
+- Internet connection
+- Solidity programming language
+
+**Remix IDE:** [Open Remix IDE](https://remix.ethereum.org/?utm_source=chatgpt.com).
+
+## **3. Theory**
+
+### **What is a Smart Contract?**
+
+A smart contract is a self-executing program stored on a blockchain. It automatically performs operations when predefined conditions are satisfied.
+
+In simple words:
+
+Imagine a bank account. You can deposit money, withdraw money and check your balance.
+
+Similarly, we will create a smart contract that performs these three operations using Solidity.
+
+### **What is Solidity?**
+
+Solidity is a programming language used to write smart contracts, mainly for Ethereum and compatible blockchain networks.
+
+### **What is a Test Network?**
+
+A test network (testnet) is used to test smart contracts without spending real cryptocurrency.
+
+For this practical, we can use the Sepolia test network and free test ETH.
+
+## **4. Smart Contract Code**
+
+Open Remix IDE and create a new file named `BankAccount.sol`.
+
+Copy this code:
+
+```
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract BankAccount {
+
+    uint public balance;
+
+    // Deposit money
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit amount must be greater than zero");
+
+        balance += msg.value;
+    }
+
+    // Withdraw money
+    function withdraw(uint amount) public {
+        require(amount > 0, "Amount must be greater than zero");
+        require(amount <= balance, "Insufficient balance");
+
+        balance -= amount;
+
+        payable(msg.sender).transfer(amount);
+    }
+
+    // Show balance
+    function showBalance() public view returns (uint) {
+        return balance;
+    }
+}
+
+```
+
+## **5. Explanation of the Code**
+
+Let's understand every part of the program.
+
+### **A. SPDX License**
+
+```
+// SPDX-License-Identifier: MIT
+```
+
+It specifies the license under which the smart contract code is shared.
+
+### **B. Solidity Version**
+
+```
+pragma solidity ^0.8.20;
+```
+
+It tells Remix to compile the contract using Solidity version 0.8.20 or compatible newer versions below 0.9.0.
+
+### **C. Contract Declaration**
+
+```
+contract BankAccount {
+```
+
+It creates a smart contract named `BankAccount`.
+
+### **D. Balance Variable**
+
+```
+uint public balance;
+```
+
+- `uint` means unsigned integer (only positive numbers and zero).
+- `public` allows anyone to read the variable.
+- `balance` stores the account balance in Wei.
+
+### **E. Deposit Function**
+
+```
+function deposit() public payable {
+    require(msg.value > 0, "Deposit amount must be greater than zero");
+    balance += msg.value;
+}
+```
+
+- `function` defines a function.
+- `public` means it can be called externally.
+- `payable` allows the function to receive Ether.
+- `msg.value` represents the amount of Ether sent with the transaction.
+- `require()` checks a condition.
+- `balance += msg.value` adds the deposited amount to the balance.
+
+### **F. Withdraw Function**
+
+```
+function withdraw(uint amount) public {
+    require(amount > 0, "Amount must be greater than zero");
+    require(amount <= balance, "Insufficient balance");
+
+    balance -= amount;
+
+    payable(msg.sender).transfer(amount);
+}
+```
+
+- `amount` represents the withdrawal amount in Wei.
+- The first `require()` checks that the amount is greater than zero.
+- The second `require()` checks that sufficient balance is available.
+- `balance -= amount` subtracts the withdrawal amount.
+- `transfer()` sends Ether to the caller.
+
+### **G. Show Balance Function**
+
+```
+function showBalance() public view returns (uint) {
+    return balance;
+}
+```
+
+- `view` means the function reads data without modifying blockchain state.
+- `returns (uint)` means it returns an unsigned integer.
+- `return balance` displays the current balance in Wei.
+
+## **6. Important Solidity Concepts**
+
+| Keyword      | Meaning                        |
+| ------------ | ------------------------------ |
+| `contract`   | Defines a smart contract       |
+| `uint`       | Unsigned integer               |
+| `public`     | Accessible externally          |
+| `payable`    | Allows receiving Ether         |
+| `msg.value`  | Ether sent with a transaction  |
+| `msg.sender` | Address of the caller          |
+| `require()`  | Checks a condition             |
+| `view`       | Reads data without changing it |
+| `returns`    | Specifies the returned value   |
+| `transfer()` | Transfers Ether                |
+
+## **7. Improved Smart Contract for a Customer's Bank Account**
+
+One important improvement: since this is a customer's bank account, only that customer should be allowed to deposit and withdraw money. We should restrict access using an `owner` variable.
+
+Use this improved version for your practical:
+
+```
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract BankAccount {
+
+    address public owner;
+    uint public balance;
+
+    // Set customer as account owner
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // Check whether caller is the owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can access");
+        _;
+    }
+
+    // Deposit money
+    function deposit() public payable onlyOwner {
+        require(msg.value > 0, "Enter valid amount");
+
+        balance += msg.value;
+    }
+
+    // Withdraw money
+    function withdraw(uint amount) public onlyOwner {
+        require(amount > 0, "Enter valid amount");
+        require(amount <= balance, "Insufficient balance");
+
+        balance -= amount;
+
+        payable(owner).transfer(amount);
+    }
+
+    // Show balance
+    function showBalance() public view returns (uint) {
+        return balance;
+    }
+}
+
+```
+
+**Why is this version better?**
+
+- `owner` stores the customer's wallet address.
+- `constructor()` sets the person deploying the contract as its owner.
+- `modifier onlyOwner()` prevents other people from depositing or withdrawing through this contract.
+- `_;` allows the function to execute after the owner check succeeds.
+
+For your exam, this version demonstrates basic bank account functionality with access control.
+
+## **8. Steps to Compile and Deploy the Smart Contract**
+
+[Development Environment | RareSkills](https://images.openai.com/static-rsc-4/59Ey8bDuneL_ae59qPYJ_MAswucp429VuIVKWPc6SRqFv8lqhpfhNphOJjUHtlycGpbd2McKzzOOxqx0l2OV45f_o1PJaF6SisIFQ9H3Sn6a3NBnfdmMxRIoY-ZsgFSnqKxLT5aQj7koLefCuqwIdLkJ-FJ_-SjnXffRDsmTOGM?purpose=inline)
+
+[Learn Solidity in Y Minutes](https://images.openai.com/static-rsc-4/RlF3x7YZb2DnKZdU4Rj5x_50B8G4iVGHiujnvCQvVZyxDcbHPQs4Ft_e5eBmsY7cbHCNAu4yme-PgXmHpuPFSanO2KoESKF_Rd1C4qQioYDXvjVAxP0g5YCkZ2dUcaZkAFK8ZOrOmSPuSzTQ0BKU8EFlmxF-O7RJDdsCTtcKMQ8?purpose=inline)
+
+[How to set correct EVM version, for Solidity code, on remix.ethereum.org - Ethereum Stack Exchange](https://images.openai.com/static-rsc-4/y5Q0b64R1et72kWoubf2ntxrJCYLUasPrNQEKzdaew-oW40dIT5swaTLLZch0dH5q5z-yOrc2rFChE0mlBX9hebWyjqZBIuu0GZwOsK__NUsxEzYARb4UxVxUqa8Iepm0Oh6jRqGbnsqheKK9aX3-JHW76E-ldovfXbnosMyMUM?purpose=inline)
+
+7
+
+**Step 1: Open Remix IDE**
+
+Visit [Remix IDE](https://remix.ethereum.org/?utm_source=chatgpt.com).
+
+**Step 2: Create a file**
+
+1. Click File Explorer.
+2. Create a new file.
+3. Name it `BankAccount.sol`.
+4. Paste the smart contract code.
+
+**Step 3: Compile the contract**
+
+1. Click Solidity Compiler.
+2. Select compiler version 0.8.20.
+3. Click Compile BankAccount.sol.
+4. A green tick indicates successful compilation.
+
+**Step 4: Connect MetaMask**
+
+1. Open MetaMask.
+2. Select Sepolia Test Network.
+3. Make sure you have Sepolia test ETH.
+4. In Remix, open Deploy & Run Transactions.
+5. Select **Injected Provider - MetaMask** as the environment.
+6. Approve the connection in MetaMask.
+
+**Step 5: Deploy the contract**
+
+1. Select `BankAccount` from the contract dropdown.
+2. Click Deploy.
+3. Confirm the transaction in MetaMask.
+4. Wait for deployment confirmation.
+5. Your deployed contract will appear under Deployed Contracts.
+
+## **9. Perform the Three Operations**
+
+[Learn Solidity in Y Minutes](https://images.openai.com/static-rsc-4/lJmZiWiD5AhY5bbGoXSTFMXz61wgukLKqQdAEydeRtx0JwZByQ6LYLRIKnrmxNVwzx6rhRgqE13PMXVdE5xvPbVhZmKCdkctHZ__FKtvzGi8dINJBbwiiZSi3-OXc1ECRCLnD88Vc3fitHNzORRr3qx62Q4XH5lgv2j71LYXp_8?purpose=inline)
+
+[learnxinyminutes.com](https://learnxinyminutes.com/solidity/?utm_source=chatgpt.com)
+
+### **Operation 1: Deposit Money**
+
+1. Find the Value field in Remix.
+2. Enter `1`.
+3. Select the unit `Ether`.
+4. Click the `deposit` button.
+5. Confirm the transaction in MetaMask.
+
+Expected result
+
+The contract receives 1 ETH and the balance increases by 1 ETH.
+
+### **Operation 2: Show Balance**
+
+1. Click the `showBalance` button.
+2. Remix displays the balance in Wei.
+
+For 1 ETH:
+
+\\[ 1\ ETH = 10^{18}\ Wei \\]
+
+So the result will be:
+
+`1000000000000000000`
+
+### **Operation 3: Withdraw Money**
+
+Suppose you want to withdraw 0.5 ETH.
+
+1. Enter the amount in the `withdraw` input field.
+2. Remember that the amount must be entered in Wei.
+3. Enter:
+
+`500000000000000000`
+
+4. Click withdraw.
+5. Confirm the MetaMask transaction.
+6. Click showBalance again.
+
+Expected result
+
+Remaining balance = 0.5 ETH.
+
+## **10. Sample Practical Execution**
+
+Assume we deploy the contract and perform these operations:
+
+| Operation       | Amount  | Balance |
+| --------------- | ------- | ------- |
+| Initial balance | 0 ETH   | 0 ETH   |
+| Deposit         | 1 ETH   | 1 ETH   |
+| Deposit         | 2 ETH   | 3 ETH   |
+| Withdraw        | 0.5 ETH | 2.5 ETH |
+
+**Final balance: 2.5 ETH**
+
+Note: The balance is stored in Wei. Remix displays the raw Wei value, so convert it into ETH when recording your observations.
+
+## **11. Observation Table**
+
+| Sr. No. | Operation        | Expected result            |
+| ------- | ---------------- | -------------------------- |
+| 1       | Deposit 1 ETH    | Balance = 1 ETH            |
+| 2       | Deposit 2 ETH    | Balance = 3 ETH            |
+| 3       | Withdraw 0.5 ETH | Balance = 2.5 ETH          |
+| 4       | Withdraw 5 ETH   | Insufficient balance error |
+
+## **12. Result**
+
+Successfully created, compiled and deployed a BankAccount smart contract on the Ethereum Sepolia test network using Remix IDE.
+
+The smart contract successfully performed deposit, withdrawal and balance-checking operations.
+
+## **13. Conclusion**
+
+We learned how to create a smart contract using Solidity and deploy it on an Ethereum test network. We also performed banking operations using smart contract functions.
+
+# **14. Important Viva Questions and Answers**
+
+**Q1. What is a smart contract?**
+
+A smart contract is a program stored on a blockchain that automatically executes predefined instructions.
+
+**Q2. Which language is used to write this smart contract?**
+
+Solidity.
+
+**Q3. What is Remix IDE?**
+
+Remix is an online development environment used to write, compile, test and deploy Solidity smart contracts.
+
+**Q4. Why do we use the Sepolia test network?**
+
+To test smart contracts and transactions without spending real Ether.
+
+**Q5. What is the use of&#x20;**`payable`**?**
+
+It allows a function to receive Ether.
+
+**Q6. What is&#x20;**`msg.value`**?**
+
+It represents the amount of Ether sent along with a transaction, expressed in Wei.
+
+**Q7. What is&#x20;**`msg.sender`**?**
+
+It represents the address of the account that calls the function.
+
+**Q8. What is a constructor?**
+
+A constructor is a special function that executes only once when a smart contract is deployed.
+
+**Q9. What is the use of&#x20;**`require()`**?**
+
+It checks conditions. If a condition is false, the transaction is reverted.
+
+**Q10. What is the use of&#x20;**`view`**?**
+
+It allows a function to read blockchain data without modifying the contract's state.
+
+**Q11. What is Wei?**
+
+Wei is the smallest unit of Ether.
+
+1 ETH = 10¹⁸ Wei.
+
+**Q12. What happens if we withdraw more money than the available balance?**
+
+The transaction is reverted because the insufficient balance condition fails.
+
+**Q13. What is&#x20;**`transfer()`**?**
+
+It transfers Ether from the smart contract to another payable address.
+
+**Q14. What is the use of&#x20;**`public`**?**
+
+It makes a function or variable accessible externally.
+
+**Q15. What is gas in Ethereum?**
+
+Gas measures the computational work required to execute operations on Ethereum.
+
+**Q16. What is the difference between&#x20;**`view`**&#x20;and&#x20;**`payable`**?**
+
+| View                   | Payable                |
+| ---------------------- | ---------------------- |
+| Reads contract data    | Allows receiving Ether |
+| Does not modify state  | Can modify state       |
+| Example: showBalance() | Example: deposit()     |
+
+**Q17. What is the use of&#x20;**`modifier`**?**
+
+A modifier is used to add conditions or restrictions before executing a function.
+
+**Q18. Why do we use&#x20;**`onlyOwner`**?**
+
+To ensure that only the account owner can perform restricted operations.
+
+**Q19. What happens if a transaction fails?**
+
+The transaction is reverted, and the state changes are undone. Gas may still be charged.
+
+**Q20. Can a smart contract be modified after deployment?**
+
+Normally, deployed contract code is immutable. Updating functionality generally requires a new deployment or a specifically designed upgrade mechanism.
+
+## **15. Last-minute revision**
+
+**Remember these five things:**
+
+1. `deposit()` → Adds Ether.
+2. `withdraw()` → Sends Ether.
+3. `showBalance()` → Displays account balance.
+4. `payable` → Allows receiving Ether.
+5. `require()` → Checks conditions.
+
+**Most important formula:**
+
+\\[ 1\ ETH = 10^{18}\ Wei \\]
+
+**One important practical tip:** The gas fee for deposit and withdrawal transactions is separate from the deposited amount. Also, calling `showBalance()` is a read-only operation and normally does not require a gas fee when called directly in Remix.
+
+Next, we can practise this entire program as a lab exam: I'll give you the code-writing task and then ask viva questions one by one.

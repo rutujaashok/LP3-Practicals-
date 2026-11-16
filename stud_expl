@@ -1,0 +1,523 @@
+Let's prepare your **5th Blockchain practical** in simple, exam-ready language. This practical covers three important Solidity concepts: **Structures, Arrays and Fallback Functions**, followed by deployment on Ethereum and observation of gas fees.
+
+# **Practical 5: Student Data Management Using Solidity**
+
+## **1. Aim**
+
+To write a Solidity program to create and manage student data using Structures, Arrays and Fallback functions, deploy it on the Ethereum test network, and observe transaction fees and gas values.
+
+## **2. Software Requirements**
+
+1. Remix IDE
+2. MetaMask wallet
+3. Ethereum Sepolia Test Network
+4. Solidity programming language
+5. Internet connection
+
+## **3. Theory**
+
+### **A. Structure (**`struct`**)**
+
+A structure is a user-defined data type that groups different types of data under one name.
+
+For example, student information includes:
+
+- Roll number
+- Name
+- Marks
+
+Instead of creating separate variables, we can store all these details inside one structure called `Student`.
+
+### **B. Array**
+
+An array is a collection of elements of the same data type stored under one variable name.
+
+In this practical, we use an array to store multiple student records.
+
+### **C. Fallback Function**
+
+A fallback function is a special function in Solidity that executes when:
+
+- A function that does not exist is called, or
+- Ether is sent to a contract without any function data.
+
+It is written using the `fallback()` keyword.
+
+## **4. Solidity Program**
+
+Open [Remix IDE](https://remix.ethereum.org/?utm_source=chatgpt.com).
+
+Create a file named `StudentData.sol` and write the following code.
+
+```
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract StudentData {
+
+    // Structure to store student details
+    struct Student {
+        uint rollNo;
+        string name;
+        uint marks;
+    }
+
+    // Array to store multiple students
+    Student[] public students;
+
+    // Event for fallback function
+    event FallbackCalled(address sender, uint amount);
+
+    // Function to add student details
+    function addStudent(
+        uint _rollNo,
+        string memory _name,
+        uint _marks
+    ) public {
+        students.push(Student(_rollNo, _name, _marks));
+    }
+
+    // Function to get student details
+    function getStudent(uint index)
+        public
+        view
+        returns (uint, string memory, uint)
+    {
+        require(index < students.length, "Invalid student index");
+
+        Student memory s = students[index];
+
+        return (s.rollNo, s.name, s.marks);
+    }
+
+    // Function to get total number of students
+    function getStudentCount() public view returns (uint) {
+        return students.length;
+    }
+
+    // Fallback function
+    fallback() external payable {
+        emit FallbackCalled(msg.sender, msg.value);
+    }
+}
+
+```
+
+## **5. Explanation of the Program**
+
+Let's understand each part in simple language.
+
+### **A. Structure**
+
+```
+struct Student {
+    uint rollNo;
+    string name;
+    uint marks;
+}
+```
+
+Here, we create a structure named `Student`.
+
+It contains three variables:
+
+- `rollNo` stores the student's roll number.
+- `name` stores the student's name.
+- `marks` stores the student's marks.
+
+For example:
+
+| Roll No. | Name  | Marks |
+| -------- | ----- | ----- |
+| 1        | Rahul | 85    |
+| 2        | Priya | 90    |
+
+### **B. Array**
+
+```
+Student[] public students;
+```
+
+- `Student[]` creates an array of Student structures.
+- `students` is the array name.
+- `public` allows users to read stored records.
+
+It can store multiple student records.
+
+### **C. Add Student Function**
+
+```
+function addStudent(
+    uint _rollNo,
+    string memory _name,
+    uint _marks
+) public {
+    students.push(Student(_rollNo, _name, _marks));
+}
+```
+
+This function adds a new student record to the array.
+
+- `uint` represents the roll number and marks.
+- `string memory` stores the student's name temporarily while the function executes.
+- `push()` adds a new student to the array.
+
+### **D. Get Student Function**
+
+```
+function getStudent(uint index)
+    public
+    view
+    returns (uint, string memory, uint)
+```
+
+This function retrieves student details using the array index.
+
+For example, index `0` gives the first student.
+
+### **E. Get Student Count**
+
+```
+function getStudentCount() public view returns (uint) {
+    return students.length;
+}
+```
+
+It returns the total number of students stored in the array.
+
+### **F. Fallback Function**
+
+```
+fallback() external payable {
+    emit FallbackCalled(msg.sender, msg.value);
+}
+```
+
+- `fallback()` executes when an unmatched function call is made.
+- `external` means it can be called externally.
+- `payable` allows it to receive Ether.
+- `msg.sender` represents the sender's address.
+- `msg.value` represents the Ether sent.
+- `emit` generates an event that can be recorded in transaction logs.
+
+**Easy example:** Suppose someone calls a function that does not exist in our smart contract. The fallback function executes instead.
+
+## **6. Steps to Compile and Deploy**
+
+[How to Write a Smart Contract in Solidity: A Beginner’s Guide | by Asjad Ahmed Khan | kalpstudio | Medium](https://images.openai.com/static-rsc-4/AU3oyDlTYZNGYlJvtppOs5Ke9__AKhH9Q2dcIhQTQ_OZyw1fjc62WsP7bKCp4xnlQkVCew5cXfx-jP0B156zNB-reL-7wQzK77OA4-RCIQZLLZ4Sw06s0XZ-U95D_KONBGhE-td0p0XqMvKVeCshVsxpLQaN9lydpnYfbs81iNI?purpose=inline)
+
+[Solidity Remix IDE Quickstart - Be on the Right Side of Change](https://images.openai.com/static-rsc-4/ByLZAKizpvwujE1o_Foc22upHHQZUPkpkGKXcOQt1sooVO4bypf0jz-iO9e1I0YYG0R3CdeExvh5oPZSWxS1b4QM93Okr3MNApuNHL5QfrCUr-1_Bnbq_EajnbdZuwwiXY48gil3aQodGR7hmB3hIK5CxvwgNSNhDTX0e5ZG8o8?purpose=inline)
+
+[How to set correct EVM version, for Solidity code, on remix.ethereum.org - Ethereum Stack Exchange](https://images.openai.com/static-rsc-4/y5Q0b64R1et72kWoubf2ntxrJCYLUasPrNQEKzdaew-oW40dIT5swaTLLZch0dH5q5z-yOrc2rFChE0mlBX9hebWyjqZBIuu0GZwOsK__NUsxEzYARb4UxVxUqa8Iepm0Oh6jRqGbnsqheKK9aX3-JHW76E-ldovfXbnosMyMUM?purpose=inline)
+
+6
+
+**Step 1: Open Remix IDE**
+
+Visit [Remix IDE](https://remix.ethereum.org/?utm_source=chatgpt.com).
+
+**Step 2: Create a Solidity file**
+
+- Open File Explorer.
+- Click New File.
+- Name it `StudentData.sol`.
+- Paste the above code.
+
+**Step 3: Compile the program**
+
+- Open Solidity Compiler.
+- Select version `0.8.20`.
+- Click Compile StudentData.sol.
+- Check for the green tick.
+
+**Step 4: Connect MetaMask**
+
+- Open MetaMask.
+- Select Sepolia Test Network.
+- Make sure you have Sepolia test ETH.
+- In Remix, open Deploy & Run Transactions.
+- Select `Injected Provider - MetaMask`.
+- Approve the connection.
+
+**Step 5: Deploy the contract**
+
+- Select `StudentData` from the contract dropdown.
+- Click Deploy.
+- Confirm the transaction in MetaMask.
+- Wait for deployment to complete.
+
+Your smart contract will appear under Deployed Contracts.
+
+## **7. Execution of the Program**
+
+After deployment, expand the StudentData contract.
+
+### **Operation 1: Add Student**
+
+Find the `addStudent` function and enter:
+
+| Input     | Value |
+| --------- | ----- |
+| `_rollNo` | 1     |
+| `_name`   | Rahul |
+| `_marks`  | 85    |
+
+Click `addStudent` and confirm the transaction in MetaMask.
+
+Now add another student:
+
+| Input     | Value |
+| --------- | ----- |
+| `_rollNo` | 2     |
+| `_name`   | Priya |
+| `_marks`  | 90    |
+
+Click `addStudent` again.
+
+Expected output
+
+Two student records are stored in the array.
+
+### **Operation 2: Display Student Details**
+
+- Enter `0` in the `getStudent` function.
+- Click the button.
+
+Expected output:
+
+```
+1, Rahul, 85
+```
+
+For the second student, enter `1`.
+
+Expected output:
+
+```
+2, Priya, 90
+```
+
+### **Operation 3: Display Total Students**
+
+Click `getStudentCount`.
+
+Expected output:
+
+```
+2
+```
+
+### **Operation 4: Test Fallback Function**
+
+1. Find the `fallback` button in the deployed contract.
+2. Enter a small amount of Sepolia test ETH in the Value field, if you want to test Ether reception.
+3. Select Ether as the unit.
+4. Click the fallback button.
+5. Confirm the transaction in MetaMask.
+6. Check the transaction logs for the `FallbackCalled` event.
+
+The fallback function executes and records the sender's address and the amount received.
+
+If Remix does not expose a fallback button in your interface, it can also be tested using a low-level call with unmatched function data.
+
+## **8. Understanding Gas and Transaction Fee**
+
+This is an important part of the practical.
+
+### **What is Gas?**
+
+Gas is the unit used to measure the computational work required to execute operations on Ethereum.
+
+### **What is Gas Price?**
+
+Gas price is the amount paid for each unit of gas.
+
+It is generally expressed in Gwei.
+
+### **Formula**
+
+\\[ \text{Transaction Fee} = \text{Gas Used}\times\text{Effective Gas Price} \\]
+
+For example:
+
+- Gas used = 50,000
+- Gas price = 10 Gwei
+
+\\[ 50000 \times 10 = 500000\ Gwei \\]
+
+\\[ =0.0005\ ETH \\]
+
+### **How to observe gas values**
+
+After every transaction:
+
+1. Open MetaMask activity.
+2. Select the completed transaction.
+3. Open the transaction details.
+4. Note the gas used and transaction fee.
+5. You can also open the transaction on the Sepolia Etherscan explorer.
+
+[Sepolia Etherscan Explorer](https://sepolia.etherscan.io/?utm_source=chatgpt.com)
+
+### **9. Observation Table**
+
+Record the actual values shown by your transactions.
+
+| Operation         | Gas Used     | Transaction Fee |
+| ----------------- | ------------ | --------------- |
+| Deploy contract   | Actual value | Actual value    |
+| Add student 1     | Actual value | Actual value    |
+| Add student 2     | Actual value | Actual value    |
+| Fallback function | Actual value | Actual value    |
+
+**Important observations:**
+
+- Deploying a contract generally consumes more gas.
+- Adding student data consumes gas because blockchain storage is modified.
+- Adding different student names can consume different amounts of gas.
+- `getStudent()` and `getStudentCount()` are read-only calls and normally do not cost gas when executed locally in Remix.
+- Fallback consumes gas when executed as a transaction.
+
+## **10. Expected Output**
+
+```
+Student 1:
+Roll No: 1
+Name: Rahul
+Marks: 85
+
+Student 2:
+Roll No: 2
+Name: Priya
+Marks: 90
+
+Total Students: 2
+
+Fallback Function Executed Successfully.
+```
+
+## **11. Result**
+
+Successfully created and deployed a Student Data smart contract using Solidity on the Ethereum Sepolia test network.
+
+Structures and arrays were used to store student information, and the fallback function was tested. Gas consumption and transaction fees were also observed.
+
+## **12. Conclusion**
+
+We learned how to use structures and arrays to store multiple student records in Solidity. We also studied the working of fallback functions and observed gas consumption during smart contract deployment and execution.
+
+# **13. Viva Questions and Answers**
+
+These questions are especially important for this practical.
+
+**Q1. What is a structure in Solidity?**
+
+A structure is a user-defined data type that groups different variables under one name.
+
+**Q2. What is an array?**
+
+An array is a collection of elements stored under one variable name.
+
+**Q3. Why do we use structures in this program?**
+
+We use structures to store student details such as roll number, name and marks together.
+
+**Q4. Why do we use arrays?**
+
+We use arrays to store multiple student records.
+
+**Q5. What is a fallback function?**
+
+A fallback function is a special function that executes when an unknown function is called or when Ether is sent without function data and no receive function is defined.
+
+**Q6. What is the difference between fallback and receive?**
+
+| Fallback                     | Receive                     |
+| ---------------------------- | --------------------------- |
+| Executes for unmatched calls | Executes for empty calldata |
+| Can accept Ether if payable  | Must be payable             |
+| Written as `fallback()`      | Written as `receive()`      |
+
+**Q7. What is&#x20;**`push()`**&#x20;in Solidity?**
+
+It is used to add a new element to the end of a dynamic array.
+
+**Q8. What is&#x20;**`memory`**?**
+
+Memory is temporary data storage that exists only during function execution.
+
+**Q9. What is&#x20;**`storage`**?**
+
+Storage is permanent data storage maintained on the blockchain.
+
+**Q10. What is&#x20;**`msg.sender`**?**
+
+It represents the address of the account or contract that calls the current function.
+
+**Q11. What is&#x20;**`msg.value`**?**
+
+It represents the amount of Ether sent with the current transaction, in Wei.
+
+**Q12. What is an event in Solidity?**
+
+An event is used to record information in transaction logs so that external applications can monitor contract activities.
+
+**Q13. What is gas used?**
+
+It is the actual amount of computational gas consumed by a transaction.
+
+**Q14. What is a transaction fee?**
+
+It is the amount of Ether paid to process a blockchain transaction.
+
+**Q15. Why does adding student data require gas?**
+
+Because adding student data modifies the blockchain's permanent storage.
+
+**Q16. Does displaying student data require gas?**
+
+A normal read-only call does not require gas payment. However, executing it as an on-chain transaction does consume gas.
+
+**Q17. What is the smallest unit of Ether?**
+
+Wei.
+
+\\[ 1 ETH = 10^{18} Wei \\]
+
+**Q18. What is the purpose of Remix IDE?**
+
+Remix is used to write, compile, test and deploy Solidity smart contracts.
+
+**Q19. Can we delete student data from the blockchain?**
+
+In this program, we have not written any delete function. Blockchain storage changes require specially written functions, and deleting data does not necessarily erase historical blockchain records.
+
+**Q20. Why do we use a test network?**
+
+To test smart contracts without spending real cryptocurrency.
+
+## **14. Last-minute revision**
+
+**Three main constructs**
+
+- `struct` → Groups student details.
+- `array` → Stores multiple students.
+- `fallback()` → Handles unmatched function calls.
+
+**Important functions**
+
+- `push()` → Adds student.
+- `getStudent()` → Displays student details.
+- `getStudentCount()` → Counts students.
+- `fallback()` → Handles unmatched calls.
+
+**Gas formula**
+
+\\[ \text{Fee}=\text{Gas Used}\times\text{Gas Price} \\]
+
+**One important viva question:** Why is blockchain suitable for storing student records?
+
+Answer: Blockchain provides data integrity, transparency and tamper resistance. Once student records are recorded, unauthorized modification becomes difficult.
+
+*Practical tip:* Use only Sepolia test ETH for this experiment. Your fallback function accepts ETH into the contract, so do not send real funds to this basic demonstration contract.
