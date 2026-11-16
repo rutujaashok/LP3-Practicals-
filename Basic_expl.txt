@@ -1,0 +1,28 @@
+Most important viva questions
+
+1. What is an algorithm? A finite sequence of steps to solve a problem.
+2. What is time complexity? It measures how execution time grows with input size.
+3. What is space complexity? It measures memory required by an algorithm.
+4. What is Big O? It represents the upper bound of algorithm growth.
+5. What is a greedy algorithm? It selects the locally best choice at each step.
+6. What is dynamic programming? It solves problems using stored results of overlapping subproblems.
+7. What is backtracking? It tries possible solutions and goes back when a choice fails.
+8. What is a tree? A hierarchical non-linear data structure.
+9. What is a binary tree? A tree where each node has at most two children.
+10. What is a leaf node? A node with no children.
+11. What is a smart contract? A self-executing program deployed on a blockchain.
+12. What is a lossless compression algorithm? An algorithm that allows exact recovery of original data.
+13. What is a machine learning model? A mathematical model trained to identify patterns in data.
+14. What is overfitting? When a model learns training data too closely and performs poorly on unseen data.
+15. What is a Priority Queue? A queue that processes elements according to priority.
+
+Differences you must remember
+
+Concept 1	               Concept 2	           Difference
+Iteration	               Recursion	     Loop vs function calling itself
+Fractional Knapsack	      0/1 Knapsack	     Fractions allowed vs not allowed
+Backtracking	        Branch and Bound	 Searches valid solutions vs optimizes using bounds
+Greedy	               Dynamic Programming	 Local best choice vs solving overlapping subproblems
+Blockchain	                Database	     Distributed ledger vs organized data storage
+Classification	           Regression	     Predicts categories vs numerical values
+Training	                Testing	         Learning vs evaluating

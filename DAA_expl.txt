@@ -1,0 +1,205 @@
+1. Fibonacci Series
+
+Aim: Generate the Fibonacci series using iterative and recursive methods.
+
+Example: 0, 1, 1, 2, 3, 5, 8, 13
+
+Logic:
+- First number = 0.
+- Second number = 1.
+- Next number = sum of previous two numbers.
+- Repeat until the required terms are printed.
+
+A. Iterative method
+Your code uses a for loop.
+int first = 0, second = 1;
+
+for (int i = 1; i <= n; i++) {
+    int next = first + second;
+    first = second;
+    second = next;
+}
+
+Explanation:
+- first stores the first number.
+- second stores the second number.
+- next calculates their sum.
+- Values are updated for the next iteration.
+
+B. Recursive method
+Your code uses a function calling itself.
+if (n <= 0)
+    return 0;
+
+if (n == 1)
+    return 1;
+
+return fibonacci(n-1) + fibonacci(n-2);
+
+The function keeps calling itself until it reaches the base condition.
+
+Viva questions:
+Question	Short answer
+What is Fibonacci?	A series where each number is the sum of previous two numbers.
+What is recursion?	A function calling itself.
+What is iteration?	Repeating statements using loops.
+Base condition?	Condition that stops recursion.
+Which is faster?	Iterative method for this basic implementation.
+
+
+Complexity:
+- Iterative: O(n)
+- Recursive: O(2ⁿ) approximately. 
+
+2. Fractional Knapsack
+
+Aim: Maximize the total profit by selecting items that fit into a bag of limited capacity.
+
+Important concept: Greedy Algorithm.
+
+Suppose you have:
+Item	Profit	Weight	Profit/Weight
+A	     60	      10	     6
+B	    100       20	     5
+C	    120	      30	     4
+
+
+Capacity = 50.
+
+Logic:
+1. Calculate profit/weight ratio.
+2. Sort items in descending order of ratio.
+3. Select the highest-ratio item first.
+4. If the complete item doesn't fit, take a fraction of it.
+5. Calculate total profit.
+Important code:
+double ratio = (double) item.value / item.weight;
+
+This calculates profit per unit weight.
+Arrays.sort(items, comparator);
+
+Sorts items according to their ratio.
+
+Viva questions:
+- What is Greedy? Making the best available choice at each step.
+- Why is it called Fractional Knapsack? Because we can take part of an item.
+- Can we divide an item? Yes.
+- Complexity? O(n log n), mainly due to sorting.
+- Difference from 0/1 Knapsack? Fractional allows portions; 0/1 allows only complete selection or rejection.
+
+
+3. Huffman Coding
+
+Aim: Compress data by assigning shorter binary codes to frequently occurring characters and longer codes to less frequent characters.
+
+Example: hello
+
+Frequency:
+Character	Frequency
+h	            1
+e	            1
+l	            2
+o	            1
+
+
+Logic:
+1. Count frequency of each character.
+2. Create a node for each character.
+3. Insert nodes into a Priority Queue.
+4. Remove two nodes having the lowest frequency.
+5. Combine them into a new node.
+6. Repeat until one tree remains.
+7. Assign 0 to the left branch and 1 to the right branch.
+8. Generate binary codes.
+
+Understand these variables:
+- ch – character.
+- freq – frequency of character.
+- left – left child node.
+- right – right child node.
+- PriorityQueue – retrieves the node with minimum frequency.
+
+Viva questions:
+Question	Answer
+What is Huffman Coding?	A lossless data compression technique.
+What is lossless?	Original data can be recovered without losing information.
+What is a Priority Queue?	A data structure that removes elements according to priority.
+What is a leaf node?	A node with no children.
+What is the purpose of 0 and 1?	They represent left and right tree paths.
+Is Huffman greedy?	Yes.
+
+Remember: Huffman codes are prefix-free. No character's code is the prefix of another character's code. 
+
+
+4. 0/1 Knapsack using Branch and Bound
+
+Aim: Select items to get maximum profit without exceeding the bag capacity.
+
+Unlike Fractional Knapsack, here you cannot take half an item.
+
+Logic:
+1. Calculate profit-to-weight ratio.
+2. Sort items in descending ratio.
+3. Create a state-space tree.
+4. At each level, make two decisions:
+   - Include the item.
+   - Exclude the item.
+5. Calculate the upper bound.
+6. Ignore branches that cannot give a better profit.
+7. Find the maximum profit.
+
+Important variables in your code:
+Variable	Meaning
+level	Current item position
+profit	Total selected profit
+weight	Total selected weight
+bound	Estimated maximum possible profit
+
+
+Viva questions:
+- What is Branch and Bound? An optimization technique that explores possible solutions and removes unpromising branches.
+- What is bounding? Calculating an upper limit for a possible solution.
+- What is pruning? Removing branches that cannot improve the answer.
+- What is the difference between Backtracking and Branch and Bound? Backtracking generally eliminates invalid choices; Branch and Bound eliminates choices that cannot improve an optimization result. github.com
+
+5. N-Queen Problem
+
+Aim: Place N queens on an N×N chessboard so that no two queens attack each other.
+
+Rules:
+- No two queens in the same row.
+- No two queens in the same column.
+- No two queens on the same diagonal.
+Your program asks the user to enter the column for each row and checks whether the position is safe.
+
+Logic:
+1. Create an N×N chessboard.
+2. Start from row 0.
+3. Ask for a column to place a queen.
+4. Check whether that position is safe.
+5. If safe, place the queen.
+6. Move to the next row.
+7. Repeat until all queens are placed.
+
+Viva questions:
+Question	Answer
+What is Backtracking?	Trying a solution and going back when it fails.
+What is a queen?	A chess piece that moves horizontally, vertically and diagonally.
+Why check diagonals?	To prevent queens from attacking each other.
+What is a safe position?	A position where no existing queen can attack the new queen.
+Can we solve 2-Queen problem?	No.
+
+
+Program	                 Time Complexity	Space Complexity
+Fibonacci – Iterative	      O(n)	              O(1)
+Fibonacci – Recursive	     O(2ⁿ)	              O(n)
+Fractional Knapsack	       O(n log n)	          O(n)
+Fractional Knapsack Updated	O(n log n)	          O(n)
+Huffman Coding	            O(n log n)	          O(n)
+Huffman Coding 1	        O(n log n)	          O(n)
+0/1 Knapsack – Branch and Bound	O(2ⁿ) worst case	O(2ⁿ) worst case
+N-Queen – Backtracking	       O(n!)	          O(n²)
+
+
+Time Complexity: Amount of time taken by an algorithm as input size increases.
+Space Complexity: Amount of memory required by an algorithm as input size increases.

@@ -1,0 +1,100 @@
+1. Bank Account Management
+
+Aim: Create a simple banking smart contract that allows users to deposit, withdraw and check balance.
+
+Your contract name is SimpleBank.
+
+Important code explanation:
+address public owner;
+uint256 public balance;
+
+- address owner stores the owner's blockchain address.
+- uint256 balance stores the account balance.
+constructor() {
+    owner = msg.sender;
+    balance = 0;
+}
+
+- Constructor runs only once when the contract is deployed.
+- msg.sender represents the address that deploys the contract.
+
+Main functions:
+- deposit() – Adds money to the balance.
+- withdraw() – Subtracts money from the balance.
+- getBalance() – Returns the current balance (if present in the implementation).
+
+Viva questions:
+Question	Answer
+What is Blockchain?	A distributed digital ledger.
+What is Solidity?	A programming language used to write smart contracts.
+What is a smart contract?	A program stored and executed on a blockchain.
+What is Ethereum?	A blockchain platform supporting smart contracts.
+What is Remix IDE?	An online IDE for writing and deploying Solidity contracts.
+What is msg.sender?	Address of the account calling the function.
+What is a constructor?	A special function executed during deployment.
+What is uint256?	An unsigned 256-bit integer.
+
+
+2. Student Marks Management System
+
+Aim: Store student details and manage their marks using a smart contract.
+
+Your contract name is MarksManagmtSys.
+Understand the code
+1. Structure
+struct Student {
+    uint id;
+    string fName;
+    string lName;
+    uint marks;
+}
+
+A structure groups related student information together.
+
+2. Array
+Student[] public stdRecords;
+
+Stores multiple student records.
+
+3. Owner
+address owner = msg.sender;
+
+Stores the address of the person deploying the contract.
+
+4. Modifier
+modifier onlyOwner() {
+    require(msg.sender == owner);
+    _;
+}
+
+- Checks whether the caller is the owner.
+- require() checks a condition.
+- _ means execute the original function body.
+5. Add records
+stdRecords.push(
+    Student(id, first, last, marks)
+);
+
+Adds a new student record to the array.
+
+6. View marks
+function viewMarks(uint index)
+public view returns (uint)
+
+Returns marks of a particular student.
+
+7. Bonus marks
+stdRecords[index].marks += bonus;
+
+Adds bonus marks to the student's existing marks.
+
+Viva questions:
+Question	Answer
+What is a struct?	A user-defined data type that groups variables.
+What is an array?	A collection of elements.
+What is a modifier?	A reusable condition applied to functions.
+What is require()?	Checks a condition and reverts if false.
+What is public?	Makes a function or variable publicly accessible.
+What is view?	Allows reading contract data without modifying state.
+What is memory?	Temporary data storage during function execution.
+What is push()?	Adds an element to an array.
